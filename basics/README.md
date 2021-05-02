@@ -7,7 +7,7 @@
 - Completely isolated environment
 - Different containers share the same kernel -> only containerize applications
 
-![container-structure](docs/images/container-structure.png)
+<img align="right" src="https://github.com/kyminbb/ckad-prep/blob/main/basics/docs/images/container-structure.png" width="30%" height="30%">
 
 - Instantiation of Docker Images, which easily resolve dependencies independently of the deployment environment
 - Container orchestration
@@ -42,4 +42,6 @@
   - kubelet
     - Agent that runs on each node
 
-![master-worker-nodes](docs/images/master-worker-nodes.png)
+<p align="center">
+  <img src="https://github.com/kyminbb/ckad-prep/blob/main/basics/docs/images/master-worker-nodes.png" width="70%" height="70%">
+</p>
