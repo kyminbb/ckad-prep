@@ -4,11 +4,10 @@
 
 ### Containers
 
-- Completely isolated environment
-- Different containers share the same kernel -> only containerize applications
-
 <img align="right" src="https://github.com/kyminbb/ckad-prep/blob/main/basics/docs/images/container-structure.png" width="30%" height="30%">
 
+- Completely isolated environment
+- Different containers share the same kernel -> only containerize applications
 - Instantiation of Docker Images, which easily resolve dependencies independently of the deployment environment
 - Container orchestration
   - Process of automatically deploying and managing containers
