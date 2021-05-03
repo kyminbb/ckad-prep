@@ -53,15 +53,15 @@
   - Encapsulates a container
   - Sometimes a pod can consist of multiple containers, yet of different applications
   - Creating a pod
-  ```bash 
-  kubectl run <pod_name> --image=<image_name>
-  ```
+    ```bash 
+    kubectl run <pod_name> --image=<image_name>
+    ```
   - List of pods available
-  ```bash
-  kubectl get pods [-o wide]
-  ```
+    ```bash
+    kubectl get pods [-o wide]
+    ```
   - Pod information
-  ```bash
-  kubectl describe pod <pod_name>
-  ```
+    ```bash
+    kubectl describe pod <pod_name>
+    ```
  
