@@ -44,3 +44,24 @@
 <p align="center">
   <img src="https://github.com/kyminbb/ckad-prep/blob/main/basics/docs/images/master-worker-nodes.png" width="70%" height="70%">
 </p>
+
+### Kubernetes Concepts
+
+- Pod
+  - A single instance of an application
+  - The smallest unit you can create in Kubernetes object model
+  - Encapsulates a container
+  - Sometimes a pod can consist of multiple containers, yet of different applications
+  - Creating a pod
+  ```bash 
+  kubectl run <pod_name> --image=<image_name>
+  ```
+  - List of pods available
+  ```bash
+  kubectl get pods [-o wide]
+  ```
+  - Pod information
+  ```bash
+  kubectl describe pod <pod_name>
+  ```
+ 
