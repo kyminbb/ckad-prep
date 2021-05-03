@@ -1,0 +1,26 @@
+---
+Fruit: Apple
+Drink: Water
+Dessert: Cake
+# 1. Add a Vegetable - Carrot.
+Vegetable: Carrot
+
+Fruits:
+  - Apple
+  - Banana
+  - Oragne
+# 2. Add a list of Vegetables - Carrot, Tomato, Cucumber.
+# 3. Update the nutrition information for Vegetables.
+Vegetables:
+  - Carrot:
+      Calories: 25
+      Fat: 0.1
+      Carbs: 6
+  - Tomato:
+      Calories: 22
+      Fat: 0.2
+      Carbs: 4.8
+  - Cucumber:
+      Calories: 8
+      Fat: 0.1
+      Carbs: 1.9

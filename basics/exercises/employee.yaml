@@ -1,0 +1,20 @@
+---
+# 4. Jacob is 30 year old Male working as a Software Engineer at a firm. Represent Jacob's information (Name, Sex, Age,
+#    Title) in YAML format. Create a dictionary named Employee and define properties under it.
+Employee:
+  Name: Jacob
+  Sex: Male
+  Age: 30
+  Title: Software Engineer
+  # 5. Update the Projects assigned to Jacob.
+  Projects:
+    - Automation
+    - Support
+  # 6. Add a new property Payslips and create a list of pay slip details (Use list of dictionaries).
+  Payslips:
+    - Month: June
+      Wage: 4000
+    - Month: July
+      Wage: 4500
+    - Month: August
+      Wage: 4000
