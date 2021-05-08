@@ -52,6 +52,23 @@
   - The smallest unit you can create in Kubernetes object model
   - Encapsulates a container
   - Sometimes a pod can consist of multiple containers, yet of different applications
+  - Pod definition
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: <pod_name>
+      labels:
+        [key_value_pairs]
+    spec:
+      containers:
+        - name: <container_name>
+          image: <image>
+        ...
+    ```
+
+    Create with `kubectl create -f <yaml_file>`
   - Creating a pod
 
     ```bash
@@ -69,21 +86,45 @@
     ```bash
     kubectl describe pod <pod_name>
     ```
-
-  - Pod definition
-
+- Replica set
+  - Replica set definition
+  
     ```yaml
-    apiVersion: <api_version>
-    kind: Pod
+    apiVersion: apps/v1
+    kind: ReplicaSet
     metadata:
-      name: <pod_name>
+      name: <replica_set_name>
       labels:
         [key_value_pairs]
     spec:
-      containers:
-        - name: <container_name>
-          image: <image>
-        ...
+      template:
+        <pod_definition>
+      replicas: <num_replicas>
+      selector: 
+        matchLabels:
+          [key_value_pairs_of_pods_to_manage]
     ```
-
-    Create with `kubectl apply -f <yaml_file>`.
+    
+    Create with `kubectl create -f <yaml_file>`
+  - List of replica sets
+    
+    ```bash
+    kubectl get replicaset
+    ```
+    
+  - Deleting replica set
+    
+    ```bash
+    kubectl delete replicaset <replica_set_name>
+    
+    ```
+    
+    - Also deletes all underlying pods 
+  - Updating replica set spec
+  
+    ```bash
+    kubectl replace -f <yaml_file>
+    ```
+    ```bash
+    kubectl scale --replicas=<new_num_replicas> replicaset <replica_set_name>
+    ```
