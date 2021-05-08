@@ -253,3 +253,4 @@
 
 - Acts as a reverse proxy
 - Distributes network or application traffic across clusters
+- Kubernetes can be easily intergated with native load balancers of cloud services
