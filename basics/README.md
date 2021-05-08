@@ -45,147 +45,207 @@
   <img src="https://github.com/kyminbb/ckad-prep/blob/main/basics/docs/images/master-worker-nodes.png" width="70%" height="70%">
 </p>
 
-### Kubernetes Concepts
+## Kubernetes Concepts
 
-- Pod
-  - A single instance of an application
-  - The smallest unit you can create in Kubernetes object model
-  - Encapsulates a container
-  - Sometimes a pod can consist of multiple containers, yet of different applications
-  - Pod definition
+### Pod
+- A single instance of an application
+- The smallest unit you can create in Kubernetes object model
+- Encapsulates a container
+- Sometimes a pod can consist of multiple containers, yet of different applications
+- Pod definition
 
-    ```yaml
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: <pod_name>
-      labels:
-        [key_value_pairs]
-    spec:
-      containers:
-        - name: <container_name>
-          image: <image>
-        ...
-    ```
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+    labels:
+      [key_value_pairs]
+  spec:
+    containers:
+      - name: <container_name>
+        image: <image>
+      ...
+  ```
 
-    Create with `kubectl create -f <yaml_file>`
-  - Creating a pod
+  Create with `kubectl create -f <yaml_file>`
+- Creating a pod
 
-    ```bash
-    kubectl run <pod_name> --image=<image_name>
-    ```
+  ```bash
+  kubectl run <pod_name> --image=<image_name>
+  ```
 
-  - List of pods available
+- List of pods available
 
-    ```bash
-    kubectl get pods [-o wide]
-    ```
+  ```bash
+  kubectl get pods [-o wide]
+  ```
 
-  - Pod information
+- Pod information
 
-    ```bash
-    kubectl describe pod <pod_name>
-    ```
+  ```bash
+  kubectl describe pod <pod_name>
+  ```
 
-- Replica set
-  - Replica set definition
+### Replica set
+- Replica set definition
   
-    ```yaml
-    apiVersion: apps/v1
-    kind: ReplicaSet
-    metadata:
-      name: <replica_set_name>
-      labels:
-        [key_value_pairs]
-    spec:
-      template:
-        <pod_definition>
-      replicas: <num_replicas>
-      selector: 
-        matchLabels:
-          [key_value_pairs_of_pods_to_manage]
-    ```
+  ```yaml
+  apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    name: <replica_set_name>
+    labels:
+      [key_value_pairs]
+  spec:
+    template:
+      <pod_definition>
+    replicas: <num_replicas>
+    selector: 
+      matchLabels:
+        [key_value_pairs_of_pods_to_manage]
+  ```
 
-    Create with `kubectl create -f <yaml_file>`
-  - List of replica sets
+  Create with `kubectl create -f <yaml_file>`
+- List of replica sets
 
-    ```bash
-    kubectl get replicaset
-    ```
+  ```bash
+  kubectl get replicaset
+  ```
 
-  - Deleting replica set
+- Deleting replica set
 
-    ```bash
-    kubectl delete replicaset <replica_set_name>
-    
-    ```
+  ```bash
+  kubectl delete replicaset <replica_set_name>
+  ```
 
-    - Also deletes all underlying pods
-  - Updating replica set spec
+  - Also deletes all underlying pods
+- Updating replica set spec
   
-    ```bash
-    kubectl replace -f <yaml_file>
-    ```
+  ```bash
+  kubectl replace -f <yaml_file>
+  ```
+
+  ```bash
+  kubectl scale --replicas=<new_num_replicas> replicaset <replica_set_name>
+  ```
+
+### Deployment
+- Manages rolling updates of the underlying instances and applies changes
+- Deployment strategy
+  - Recreate
+    - Apply changes to all pods altogether
+    - Application goes down and becomes inaccessible to users
+  - Rolling update
+    - Apply changes to pods one by one
+    - Default strategy of Kubernetes deployment
+- Deployment definition
+
+  ```yaml
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: <deployment_name>
+    labels:
+      [key_value_pairs]
+  spec:
+    template:
+      <pod_definition>
+    replicas: <num_replicas>
+    selector: 
+      matchLabels:
+        [key_value_pairs_of_pods_to_manage]
+  ```
+
+  Create with `kubectl create -f <yaml_file>`
+- Updating deployment
+
+  ```bash
+  kubectl apply -f <yaml_file>
+  ```
+
+- Deleting deployment
+
+  ```bash
+  kubectl delete deployment <deployment_name>
+  ```
+
+- Rollout
+
+  ```bash
+  kubectl rollout status <deployment_name>
+  ```
+
+  - Viewing rollout history
 
     ```bash
-    kubectl scale --replicas=<new_num_replicas> replicaset <replica_set_name>
+    kubectl rollout history <deployment_name>
     ```
 
-- Deployment
-  - Manages rolling updates of the underlying instances and applies changes
-  - Deployment strategy
-    - Recreate
-      - Apply changes to all pods altogether
-      - Application goes down and becomes inaccessible to users
-    - Rolling update
-      - Apply changes to pods one by one
-      - Default strategy of Kubernetes deployment
-  - Deployment definition
-
-    ```yaml
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: <deployment_name>
-      labels:
-        [key_value_pairs]
-    spec:
-      template:
-        <pod_definition>
-      replicas: <num_replicas>
-      selector: 
-        matchLabels:
-          [key_value_pairs_of_pods_to_manage]
-    ```
-
-    Create with `kubectl create -f <yaml_file>`
-  - Updating deployment
+  - Rollback
 
     ```bash
-    kubectl apply -f <yaml_file>
+    kubectl rollout undo <deployment_name>
     ```
 
-  - Deleting deployment
+## Networking in Kubernetes
+- IP address is assigned to each pod
+- Cluster networking
+  - All containers/pods must communicate to one another without NAT (Network Address Translation)
+  - All nodes must communicate with all containers and vice-versa without NAT
 
-    ```bash
-    kubectl delete deployment <deployment_name>
-    
-    ```
+## Services
 
-  - Rollout
+### NodePort
 
-    ```bash
-    kubectl rollout status <deployment_name>
-    ```
+- Enables applications to be accesible to users
+- Listens to a port on a node and forwards requests on that port to inner pods
 
-    - Viewing rollout history
+<p align="center">
+  <img src="https://github.com/kyminbb/ckad-prep/blob/main/basics/docs/images/nodeport.png" width="70%" height="70%">
+</p>
 
-      ```bash
-      kubectl rollout history <deployment_name>
-      ```
+- NodePort definition
+  
+  ```yaml
+  apiVersion: v1
+  kind: Serivce
+  metadata:
+    name: <service_name>
+  spec:
+    type: NodePort
+    ports:
+      - targetPort: [target_port]
+        port: <port>
+        nodePort: [node_port]
+    selector:
+      [key_value_pairs_of_pods_to_manage]
+  ```
+  
+  Create with `kubectl create -f <yaml_file>`
 
-    - Rollback
+### ClusterIP
 
-      ```bash
-      kubectl rollout undo <deployment_name>
-      ```
+- Allows communication between different microservices
+- ClusterIP definition
+
+  ```yaml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: <service_name>
+  spec:
+    type: ClusterIP
+    ports:
+      - targetPort: [target_port]
+        port: <port>
+    selector:
+      [key_value_pairs_of_pods_to_manage]
+  ```
+  
+  Create with `kubectl create -f <yaml_file>`
+ 
+ ### Load Balancer
+ 
+- Acts as a reverse proxy
+- Distributes network or application traffic across clusters
