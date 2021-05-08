@@ -69,7 +69,7 @@
     ```bash
     kubectl describe pod <pod_name>
     ```
-    
+
   - Pod definition
 
     ```yaml
@@ -78,13 +78,12 @@
     metadata:
       name: <pod_name>
       labels:
-        app: <app_name>
-        type: <app_type>
+        [key_value_pairs]
     spec:
       containers:
         - name: <container_name>
           image: <image>
         ...
     ```
-    
+
     Create with `kubectl apply -f <yaml_file>`.
