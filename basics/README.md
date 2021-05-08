@@ -130,16 +130,23 @@
     ```bash
     kubectl scale --replicas=<new_num_replicas> replicaset <replica_set_name>
     ```
-    
+
 - Deployment
-  - Manages rolling updates of the underlying instances and applies changes 
+  - Manages rolling updates of the underlying instances and applies changes
+  - Deployment strategy
+    - Recreate
+      - Apply changes to all pods altogether
+      - Application goes down and becomes inaccessible to users
+    - Rolling update
+      - Apply changes to pods one by one
+      - Default strategy of Kubernetes deployment
   - Deployment definition
-    
+
     ```yaml
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-      name: <replica_set_name>
+      name: <deployment_name>
       labels:
         [key_value_pairs]
     spec:
@@ -150,5 +157,35 @@
         matchLabels:
           [key_value_pairs_of_pods_to_manage]
     ```
-    
+
     Create with `kubectl create -f <yaml_file>`
+  - Updating deployment
+
+    ```bash
+    kubectl apply -f <yaml_file>
+    ```
+
+  - Deleting deployment
+
+    ```bash
+    kubectl delete deployment <deployment_name>
+    
+    ```
+
+  - Rollout
+
+    ```bash
+    kubectl rollout status <deployment_name>
+    ```
+
+    - Viewing rollout history
+
+      ```bash
+      kubectl rollout history <deployment_name>
+      ```
+
+    - Rollback
+
+      ```bash
+      kubectl rollout undo <deployment_name>
+      ```
