@@ -86,6 +86,7 @@
     ```bash
     kubectl describe pod <pod_name>
     ```
+
 - Replica set
   - Replica set definition
   
@@ -104,27 +105,28 @@
         matchLabels:
           [key_value_pairs_of_pods_to_manage]
     ```
-    
+
     Create with `kubectl create -f <yaml_file>`
   - List of replica sets
-    
+
     ```bash
     kubectl get replicaset
     ```
-    
+
   - Deleting replica set
-    
+
     ```bash
     kubectl delete replicaset <replica_set_name>
     
     ```
-    
-    - Also deletes all underlying pods 
+
+    - Also deletes all underlying pods
   - Updating replica set spec
   
     ```bash
     kubectl replace -f <yaml_file>
     ```
+
     ```bash
     kubectl scale --replicas=<new_num_replicas> replicaset <replica_set_name>
     ```
