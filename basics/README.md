@@ -48,6 +48,7 @@
 ## Kubernetes Concepts
 
 ### Pod
+
 - A single instance of an application
 - The smallest unit you can create in Kubernetes object model
 - Encapsulates a container
@@ -88,6 +89,7 @@
   ```
 
 ### Replica set
+
 - Replica set definition
   
   ```yaml
@@ -131,6 +133,7 @@
   ```
 
 ### Deployment
+
 - Manages rolling updates of the underlying instances and applies changes
 - Deployment strategy
   - Recreate
@@ -189,6 +192,7 @@
     ```
 
 ## Networking in Kubernetes
+
 - IP address is assigned to each pod
 - Cluster networking
   - All containers/pods must communicate to one another without NAT (Network Address Translation)
@@ -237,15 +241,15 @@
   spec:
     type: ClusterIP
     ports:
-      - targetPort: [target_port]
-        port: <port>
+      - targetPort: [container_port]
+        port: <service_port>
     selector:
       [key_value_pairs_of_pods_to_manage]
   ```
   
   Create with `kubectl create -f <yaml_file>`
- 
- ### Load Balancer
- 
+
+### Load Balancer
+
 - Acts as a reverse proxy
 - Distributes network or application traffic across clusters
