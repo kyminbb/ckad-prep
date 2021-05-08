@@ -130,3 +130,25 @@
     ```bash
     kubectl scale --replicas=<new_num_replicas> replicaset <replica_set_name>
     ```
+    
+- Deployment
+  - Manages rolling updates of the underlying instances and applies changes 
+  - Deployment definition
+    
+    ```yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: <replica_set_name>
+      labels:
+        [key_value_pairs]
+    spec:
+      template:
+        <pod_definition>
+      replicas: <num_replicas>
+      selector: 
+        matchLabels:
+          [key_value_pairs_of_pods_to_manage]
+    ```
+    
+    Create with `kubectl create -f <yaml_file>`
