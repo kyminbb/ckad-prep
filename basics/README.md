@@ -203,6 +203,40 @@
     kubectl rollout undo <deployment_name>
     ```
 
+### Namespace
+
+- Isolates resources
+- Each namspace can have own setup policies and quota
+- Namespace definition
+  
+  ```yaml
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: <namespace_name>
+  ```
+  
+  Create with `kubectl create -f <yaml_file>`
+  
+- List of entities
+
+  ```bash
+  kubectl get <type> --namespace=<namespace_name>
+  ```
+  
+- Creating entity
+
+  ```bash
+  kubectl create -f <yaml_file> --namespace=<namespace_name>
+  ```
+  
+  - Can be put in metadata section of definition file
+- Switching namespace
+
+  ```bash
+  kubectl config set-context $(kubectl config current-context) --namespace=<namespace_name>
+  ```
+
 ## Networking in Kubernetes
 
 - IP address is assigned to each pod
