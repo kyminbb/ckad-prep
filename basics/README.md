@@ -87,6 +87,18 @@
   ```bash
   kubectl describe pod <pod_name>
   ```
+  
+- Extracting pod definition to a file
+
+  ```bash
+  kubectl get pod <pod_name> -o yaml > <yaml_file>
+  ```
+  
+- Editing pod properties
+
+  ```bash
+  kubectl edit pod <pod_name>
+  ```
 
 ### Replica set
 
