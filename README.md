@@ -25,6 +25,7 @@
   - `args` replaces `CMD` of dockerfile
 
 ### Config map
+
 - Config map definition
 
   ```yaml
@@ -35,20 +36,20 @@
   data:
     <key_value_pairs>
   ```
-    
+
   Create with `kubectl create -f <yaml_file>`
 - Creating config map
-    
+
   ```bash
   kubectl create configmap <config_name> --from-literal=<key>=<value>
   ```
-    
+
   ```bash
   kubectl create configmap <config_name> --from-file=<config_file>
   ```
-    
+
 - Injecting config map into pod
-    
+
   ```yaml
   apiVersion: v1
   kind: Pod
@@ -64,7 +65,7 @@
           - configMapRef:
               name: <config_map_name>
   ```
-    
+
   ```yaml
   apiVersion: v1
   kind: Pod
@@ -98,17 +99,17 @@
   
   Create with `kubectl create -f <yaml_file>`
   - Encoding value in linux
-    
+
     ```bash
     echo -n <value> | base64
     ```
-    
+
   - Decoding hashed value in linux
   
     ```bash
     echo -n <hashed_value> | base64 --decode
     ```
-    
+
 - Creating secret
 
   ```bash
@@ -120,7 +121,7 @@
   ```
   
 - Injecting secret into pod
-    
+
   ```yaml
   apiVersion: v1
   kind: Pod
@@ -136,7 +137,7 @@
           - secretRef:
               name: <config_map_name>
   ```
-    
+
   ```yaml
   apiVersion: v1
   kind: Pod
