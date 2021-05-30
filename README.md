@@ -11,8 +11,6 @@
   kind: Pod
   metadata:
     name: <pod_name>
-    labels:
-      [key_value_pairs]
   spec:
     containers:
       - name: <container_name>
@@ -55,15 +53,13 @@
   kind: Pod
   metadata:
     name: <pod_name>
-    labels:
-      [key_value_pairs]
   spec:
     containers:
       - name: <container_name>
         image: <image>
         envFrom:
           - configMapRef:
-              name: [config_map_name]
+              name: <config_map_name>
   ```
 
   ```yaml
@@ -71,15 +67,13 @@
   kind: Pod
   metadata:
     name: <pod_name>
-    labels:
-      [key_value_pairs]
   spec:
     containers:
       - name: <container_name>
         image: <image>
         env:
-          - name: [key]
-            value: [value]
+          - name: <key>
+            value: <value>
           ...
   ```
 
@@ -127,15 +121,13 @@
   kind: Pod
   metadata:
     name: <pod_name>
-    labels:
-      [key_value_pairs]
   spec:
     containers:
       - name: <container_name>
         image: <image_name>
         envFrom:
           - secretRef:
-              name: [config_map_name]
+              name: <config_map_name>
   ```
 
   ```yaml
@@ -143,16 +135,14 @@
   kind: Pod
   metadata:
     name: <pod_name>
-    labels:
-      [key_value_pairs]
   spec:
     containers:
       - name: <container_name>
         image: <image_name>
         volumes:
-          - name: [volume_name]
+          - name: <volume_name>
             secret:
-              secretName: [secret_name]
+              secretName: <secret_name>
           ...
   ```
 
@@ -188,7 +178,6 @@
     kind: Pod
     metadata:
       name: <pod_name>
-      labels: [key_value_pairs]
     spec:
       securityContext:
         runAsUser: [user_name]
@@ -204,7 +193,6 @@
     kind: Pod
     metadata:
       name: <pod_name>
-      labels: [key_value_pairs]
     spec:
       containers:
       - name: <container_name>
@@ -233,13 +221,11 @@
   kind: Pod
   metadata:
     name: <pod_name>
-    labels:
-      [key_value_pairs]
   spec:
     containers:
       - name: <container_name>
         image: <image_name>
-    serviceAccount: [service_account_name]
+    serviceAccount: <service_account_name>
     automountServiceAccountToken: false   # To disable default service account mount
   ```
 
@@ -256,8 +242,6 @@
   kind: Pod
   metadata:
     name: <pod_name>
-    labels:
-      [key_value_pairs]
   spec:
     containers:
       - name: <container_name>
@@ -267,7 +251,38 @@
             memory: [memory_amount] # "256M"
             cpu: [cpu_count]  # 1
           limits:
-            memoery: [max_memory_amount]  # "2G"
+            memory: [max_memory_amount]  # "2G"
             cpu: [max_cpu_count]  # 5
   ```
 
+### Taint and Toleration
+
+- In order to run pods in certain nodes for specific purposes
+- By default, master node is tainted so that pods cannot be run
+- Tainting node
+  
+  ```bash
+  kubectl taint nodes <node_name> <key>=<value>:<taint_effect>
+  ```
+
+  - Taint effect is what happens to pods that do not tolerate the taint 
+    - NoSchedule - pods will not be scheduled on the node
+    - PreferNoSchedule - system will try to avoid placing pod on the node but not guaranteed
+    - NoExecute - only new pods will not be scheduled on the node
+- Adding toleration to pod
+
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+  spec:
+    containers:
+      - name: <container_name>
+        image: <image_name>
+    tolerations:
+      - key: <key>
+        operator: [operator]
+        value: <value>
+        effect: <taint_effect>
+  ```
