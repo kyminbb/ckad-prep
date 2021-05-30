@@ -262,7 +262,7 @@
 - Tainting node
   
   ```bash
-  kubectl taint node <node_name> <key>=<value>:<taint_effect>
+  kubectl taint node <node_name> <key>=<value>:<NoSchedule | PreferNoSchedule | NoExecute>
   ```
 
   - Taint effect is what happens to pods that do not tolerate the taint 
@@ -343,7 +343,7 @@
           nodeSelectorTerms:
           - matchExpressions:
             - key: <key>
-              operator: <operator>
+              operator: <In | NotIn | Exists | DoesNotExist | Gt | Lt>
               values: [value_list]
         preferredDuringSchedulingIgnoredDuringExecution:
           ...
@@ -357,3 +357,16 @@
     - If required, and the affinity rules are not matched, then the pod will not be scheduled
   - DuringExecution - state where pod has been running, and change is made in the environment
     - If required, and the affinity rules are not matched, then the running pod will be evicted or terminated
+
+## Multi-Container Pod
+
+### Design Patterns
+
+- Sidecar
+  - Deploying a logging agent alongside a web server to collect logs and forward them to the central log server
+- Adaptor
+  - Before sending logs to the central server, converts them to a common format
+- Ambassador
+  - Modifies connectivity in application code depending on the environment (development, test, production)
+
+
