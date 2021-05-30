@@ -16,7 +16,7 @@
   spec:
     containers:
       - name: <container_name>
-        image: <image>
+        image: <image_name>
         command: [command_list]    # ["sleep"]
         args: [argument_list]    # ["5000"] 
   ```
@@ -132,7 +132,7 @@
   spec:
     containers:
       - name: <container_name>
-        image: <image>
+        image: <image_name>
         envFrom:
           - secretRef:
               name: [config_map_name]
@@ -148,7 +148,7 @@
   spec:
     containers:
       - name: <container_name>
-        image: <image>
+        image: <image_name>
         volumes:
           - name: [volume_name]
             secret:
@@ -208,9 +208,37 @@
     spec:
       containers:
       - name: <container_name>
-        image: <image>
+        image: <image_name>
         securityContext:
           runAsUser: [user_name]
           capabilities:
             add: [capability_list]  # ["MAC_ADMIN"]
     ```
+
+### Service Account
+
+- Accounts used by applications to interact with Kubernetes clusters
+- Creating service account
+  
+  ```bash
+  kubectl create serviceaccount <service_account_name>
+  ```
+
+  - Also automatically creates tokens and secrets to store them
+  - Can export tokens manually, or store in volumes for internal use
+- Injecting service account into pod
+
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+    labels:
+      [key_value_pairs]
+  spec:
+    containers:
+      - name: <container_name>
+        image: <image_name>
+    serviceAccount: [service_account_name]
+    automountServiceAccountToken: false   # To disable default service account mount
+  ```
