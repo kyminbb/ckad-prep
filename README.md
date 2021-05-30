@@ -242,3 +242,32 @@
     serviceAccount: [service_account_name]
     automountServiceAccountToken: false   # To disable default service account mount
   ```
+
+### Resource Requirement
+
+- Each container has resource request (CPU, memory, disk)
+- Each container cannot use more than resource limit
+  - Throttles CPU if exceeds limit
+  - Allows memory to exceed limit, yet pod terminates if it cannot handle anymore
+- Injecting resource requirement into pod
+
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+    labels:
+      [key_value_pairs]
+  spec:
+    containers:
+      - name: <container_name>
+        image: <image_name>
+        resources:
+          requests:
+            memory: [memory_amount] # "256M"
+            cpu: [cpu_count]  # 1
+          limits:
+            memoery: [max_memory_amount]  # "2G"
+            cpu: [max_cpu_count]  # 5
+  ```
+
