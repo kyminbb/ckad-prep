@@ -63,7 +63,7 @@
         image: <image>
         envFrom:
           - configMapRef:
-              name: <config_map_name>
+              name: [config_map_name]
   ```
 
   ```yaml
@@ -135,7 +135,7 @@
         image: <image>
         envFrom:
           - secretRef:
-              name: <config_map_name>
+              name: [config_map_name]
   ```
 
   ```yaml
@@ -150,8 +150,67 @@
       - name: <container_name>
         image: <image>
         volumes:
-          - name: <volume_name>
+          - name: [volume_name]
             secret:
-              secretName: <secret_name>
+              secretName: [secret_name]
           ...
   ```
+
+### Security Context
+
+- Docker security
+  - Container has its own namespace and can see its processes only
+  - Processes run with root user by default
+  - Root user within a container has limited privileges (different from the root in host)
+    - Providing additional privileges
+
+      ```bash
+      docker run --cap-add <capability_name> <image_name>
+      ```
+
+    - Dropping privileges
+
+      ```bash
+      docker run --cap-drop <capability_name> <image_name>
+      ```
+
+    - Running container with all privileges enables
+
+      ```bash
+      docker run --privileged <image_name>
+      ```
+
+- Kubernetes security
+  - Pod security context definition
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: <pod_name>
+      labels: [key_value_pairs]
+    spec:
+      securityContext:
+        runAsUser: [user_name]
+      containers:
+      - name: <container_name>
+        image: <image>
+    ```
+
+  - Container security context definition
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: <pod_name>
+      labels: [key_value_pairs]
+    spec:
+      containers:
+      - name: <container_name>
+        image: <image>
+        securityContext:
+          runAsUser: [user_name]
+          capabilities:
+            add: [capability_list]  # ["MAC_ADMIN"]
+    ```
