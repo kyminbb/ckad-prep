@@ -262,13 +262,25 @@
 - Tainting node
   
   ```bash
-  kubectl taint nodes <node_name> <key>=<value>:<taint_effect>
+  kubectl taint node <node_name> <key>=<value>:<taint_effect>
   ```
 
   - Taint effect is what happens to pods that do not tolerate the taint 
     - NoSchedule - pods will not be scheduled on the node
     - PreferNoSchedule - system will try to avoid placing pod on the node but not guaranteed
     - NoExecute - only new pods will not be scheduled on the node
+- Removing taint
+
+  ```bash
+  kubectl taint node <node_name> <taint_name>-
+  ```
+
+- Viewing node taints
+
+  ```bash
+  kubectl describe node <node_name> | grep Taints
+  ```
+
 - Adding toleration to pod
 
   ```yaml
@@ -282,7 +294,66 @@
         image: <image_name>
     tolerations:
       - key: <key>
-        operator: [operator]
+        operator: <operator>
         value: <value>
         effect: <taint_effect>
   ```
+
+### Node Selector
+
+- In order to set a limitation on pods so that they only run on particular nodes
+- Node selector definition
+  
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+  spec:
+    containers:
+    - name: <container_name>
+      image: <image_name>
+    nodeSelector:
+      <key_value_pairs>
+  ```
+
+- Labeling node
+  
+  ```bash
+  kubectl label node <node_name> <key>=<value>
+  ```
+
+### Node Affinity
+
+- Provides advanced expressions for selecting particular nodes
+- Node affinity definition
+
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+  spec:
+    containers:
+    - name: <container_name>
+      image: <image_name>
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: <key>
+              operator: <operator>
+              values: [value_list]
+        preferredDuringSchedulingIgnoredDuringExecution:
+          ...
+        requiredDuringSchedulingRequiredDuringExecution:
+          ...
+        preferredDuringSchedulingRequiredDuringExecution:
+          ...
+  ```
+
+  - DuringScheduling - state where pod does not exist and is created for the first time
+    - If required, and the affinity rules are not matched, then the pod will not be scheduled
+  - DuringExecution - state where pod has been running, and change is made in the environment
+    - If required, and the affinity rules are not matched, then the running pod will be evicted or terminated
