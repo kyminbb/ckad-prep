@@ -453,7 +453,51 @@
           failureThreashold: [num_attempts_before_stopping_probe]
   ```
 
+  - TCP Test
+
+  ```yaml
+  ...
+  livenessProbe:
+    tcpSocket:
+      port: <tcp_port>
+  ```
+  
+  - Executing command
+
+  ```yaml
+  ...
+  livenessProbe:
+    exec:
+      command:
+        [command_list]
+  ```
 
 ### Container Logging
 
-### Monitoring
+- Viewing live logs
+
+```bash
+kubectl logs -f <pod_name> [container_name]
+```
+
+### Monitoring - Metrics Server
+
+- In-memory monitoring solution
+- Deploying metrics server
+
+```bash
+git clone https://github.com/kubernetes-incubator/metrics-server.git
+kubectl create -f <yaml_file>
+```
+
+- Viewing node performance metrics
+
+```bash
+kubectl top node
+```
+
+- Viewing pod performance metrics
+
+```bash
+kubectl top pod
+```
