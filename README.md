@@ -547,3 +547,48 @@
       - name: <container_name>
         image: <image_name>
     ```
+
+### Rolling Update and Rollback
+
+- Rollout and Versioning
+  - Helps keep track of changes made to deployment
+  - Viewing rollout status
+
+    ```bash
+    kubectl rollout status deployment <deployment_name>
+    ```
+
+  - Viewing rollout history
+
+    ```bash
+    kubectl rollout history deployment <deployment_name> --revision=[revision_name]
+    ```
+
+  - Rollout with details
+
+    ```bash
+    kubectl rollout deployment <deployment_name> --record=true
+    ```
+
+- Deployment strategy
+  - Recreate
+    - Applies changes to all pods altogether
+    - Application goes down and becomes inaccessible to users
+  - Rolling update
+    - Applies changes to pods one by one
+    - Default strategy of Kubernetes deployment
+- Updating deployment
+  
+  ```bash
+  kubectl apply -f <yaml_file>
+  ```
+
+  ```bash
+  kubectl set image <deployment_name> <old_image_name>=<new_image_name>
+  ```
+
+- Rollback
+
+  ```bash
+  kubectl rollout undo deployment <deployment_name>
+  ```
