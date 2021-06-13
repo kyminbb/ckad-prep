@@ -428,6 +428,32 @@
 
 ### Liveness Probe
 
+- Checks whether application inside a container is actually healthy
+- Liveness probe definition
+
+  - HTTP Test
+
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+  spec:
+    containers:
+      - name: <container_name>
+        image: <image_name>
+        ports:
+          - containerPort: <container_port>
+        livenessProbe:
+          httpGet:
+            path: <path_to_readiness_check>
+            port: <container_port>
+          initialDelaySeconds: [delay_before_liveness_check]
+          periodSeconds: [how_often_to_perform_liveness_check]
+          failureThreashold: [num_attempts_before_stopping_probe]
+  ```
+
+
 ### Container Logging
 
 ### Monitoring
