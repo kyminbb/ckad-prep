@@ -182,8 +182,8 @@
       securityContext:
         runAsUser: [user_name]
       containers:
-      - name: <container_name>
-        image: <image>
+        - name: <container_name>
+          image: <image>
     ```
 
   - Container security context definition
@@ -195,12 +195,12 @@
       name: <pod_name>
     spec:
       containers:
-      - name: <container_name>
-        image: <image_name>
-        securityContext:
-          runAsUser: [user_name]
-          capabilities:
-            add: [capability_list]  # ["MAC_ADMIN"]
+        - name: <container_name>
+          image: <image_name>
+          securityContext:
+            runAsUser: [user_name]
+            capabilities:
+              add: [capability_list]  # ["MAC_ADMIN"]
     ```
 
 ### Service Account
@@ -265,10 +265,10 @@
   kubectl taint node <node_name> <key>=<value>:<NoSchedule | PreferNoSchedule | NoExecute>
   ```
 
-  - Taint effect is what happens to pods that do not tolerate the taint 
-    - NoSchedule - pods will not be scheduled on the node
-    - PreferNoSchedule - system will try to avoid placing pod on the node but not guaranteed
-    - NoExecute - only new pods will not be scheduled on the node
+  - Taint effect is what happens to pods that do not tolerate the taint
+    - `NoSchedule` - pods will not be scheduled on the node
+    - `PreferNoSchedule` - system will try to avoid placing pod on the node but not guaranteed
+    - `NoExecute` - only new pods will not be scheduled on the node
 - Removing taint
 
   ```bash
@@ -311,8 +311,8 @@
     name: <pod_name>
   spec:
     containers:
-    - name: <container_name>
-      image: <image_name>
+      - name: <container_name>
+        image: <image_name>
     nodeSelector:
       <key_value_pairs>
   ```
@@ -335,16 +335,16 @@
     name: <pod_name>
   spec:
     containers:
-    - name: <container_name>
-      image: <image_name>
+      - name: <container_name>
+        image: <image_name>
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
-          - matchExpressions:
-            - key: <key>
-              operator: <In | NotIn | Exists | DoesNotExist | Gt | Lt>
-              values: [value_list]
+            - matchExpressions:
+              - key: <key>
+                operator: <In | NotIn | Exists | DoesNotExist | Gt | Lt>
+                values: [value_list]
         preferredDuringSchedulingIgnoredDuringExecution:
           ...
         requiredDuringSchedulingRequiredDuringExecution:
@@ -353,9 +353,9 @@
           ...
   ```
 
-  - DuringScheduling - state where pod does not exist and is created for the first time
+  - `DuringScheduling` - state where pod does not exist and is created for the first time
     - If required, and the affinity rules are not matched, then the pod will not be scheduled
-  - DuringExecution - state where pod has been running, and change is made in the environment
+  - `DuringExecution` - state where pod has been running, and change is made in the environment
     - If required, and the affinity rules are not matched, then the running pod will be evicted or terminated
 
 ## Multi-Container Pod
@@ -369,4 +369,65 @@
 - Ambassador
   - Modifies connectivity in application code depending on the environment (development, test, production)
 
+## Observability
 
+- Pod status
+  - `Pending` - when scheduler tries to figure out where to place the pod
+  - `ContainerCreating` - when images are pulled to create container
+  - `Running` - when container starts
+- Pod conditions
+  - `PodScheduled` - true when the pod is scheduled
+  - `Initialized` - true when the pod is initialized
+  - `ContainersReady` - true when containers in the pod are ready
+  - `Ready` - true when the pod is ready
+  
+### Readiness Probe
+
+- Checks whether application inside a container is actually ready
+- Readiness probe definition
+  - HTTP Test
+
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+  spec:
+    containers:
+      - name: <container_name>
+        image: <image_name>
+        ports:
+          - containerPort: <container_port>
+        readinessProbe:
+          httpGet:
+            path: <path_to_readiness_check>
+            port: <container_port>
+          initialDelaySeconds: [delay_before_readiness_check]
+          periodSeconds: [how_often_to_perform_readiness_check]
+          failureThreashold: [num_attempts_before_stopping_probe]
+  ```
+
+  - TCP Test
+
+  ```yaml
+  ...
+  readinessProbe:
+    tcpSocket:
+      port: <tcp_port>
+  ```
+  
+  - Executing command
+
+  ```yaml
+  ...
+  readinessProbe:
+    exec:
+      command:
+        [command_list]
+  ```
+
+### Liveness Probe
+
+### Container Logging
+
+### Monitoring
