@@ -13,10 +13,10 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image_name>
-        command: [command_list]    # ["sleep"]
-        args: [argument_list]    # ["5000"] 
+    - name: <container_name>
+      image: <image_name>
+      command: [command_list]    # ["sleep"]
+      args: [argument_list]    # ["5000"] 
   ```
   
   - `command` replaces `ENTRYPOINT` of dockerfile
@@ -55,11 +55,11 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image>
-        envFrom:
-          - configMapRef:
-              name: <config_map_name>
+    - name: <container_name>
+      image: <image>
+      envFrom:
+      - configMapRef:
+          name: <config_map_name>
   ```
 
   ```yaml
@@ -69,12 +69,12 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image>
-        env:
-          - name: <key>
-            value: <value>
-          ...
+    - name: <container_name>
+      image: <image>
+      env:
+      - name: <key>
+        value: <value>
+      ...
   ```
 
 ### Secret
@@ -123,11 +123,11 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image_name>
-        envFrom:
-          - secretRef:
-              name: <config_map_name>
+    - name: <container_name>
+      image: <image_name>
+      envFrom:
+      - secretRef:
+          name: <config_map_name>
   ```
 
   ```yaml
@@ -137,13 +137,13 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image_name>
-        volumes:
-          - name: <volume_name>
-            secret:
-              secretName: <secret_name>
-          ...
+    - name: <container_name>
+      image: <image_name>
+      volumes:
+      - name: <volume_name>
+        secret:
+          secretName: <secret_name>
+      ...
   ```
 
 ### Security Context
@@ -182,8 +182,8 @@
       securityContext:
         runAsUser: [user_name]
       containers:
-        - name: <container_name>
-          image: <image>
+      - name: <container_name>
+        image: <image>
     ```
 
   - Container security context definition
@@ -195,12 +195,12 @@
       name: <pod_name>
     spec:
       containers:
-        - name: <container_name>
-          image: <image_name>
-          securityContext:
-            runAsUser: [user_name]
-            capabilities:
-              add: [capability_list]  # ["MAC_ADMIN"]
+      - name: <container_name>
+        image: <image_name>
+        securityContext:
+          runAsUser: [user_name]
+          capabilities:
+            add: [capability_list]  # ["MAC_ADMIN"]
     ```
 
 ### Service Account
@@ -223,8 +223,8 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image_name>
+    - name: <container_name>
+      image: <image_name>
     serviceAccount: <service_account_name>
     automountServiceAccountToken: false   # To disable default service account mount
   ```
@@ -244,15 +244,15 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image_name>
-        resources:
-          requests:
-            memory: [memory_amount] # "256M"
-            cpu: [cpu_count]  # 1
-          limits:
-            memory: [max_memory_amount]  # "2G"
-            cpu: [max_cpu_count]  # 5
+    - name: <container_name>
+      image: <image_name>
+      resources:
+        requests:
+          memory: [memory_amount] # "256M"
+          cpu: [cpu_count]  # 1
+        limits:
+          memory: [max_memory_amount]  # "2G"
+          cpu: [max_cpu_count]  # 5
   ```
 
 ### Taint and Toleration
@@ -290,13 +290,13 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image_name>
+    - name: <container_name>
+      image: <image_name>
     tolerations:
-      - key: <key>
-        operator: <operator>
-        value: <value>
-        effect: <taint_effect>
+    - key: <key>
+      operator: <operator>
+      value: <value>
+      effect: <taint_effect>
   ```
 
 ### Node Selector
@@ -311,8 +311,8 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image_name>
+    - name: <container_name>
+      image: <image_name>
     nodeSelector:
       <key_value_pairs>
   ```
@@ -335,16 +335,16 @@
     name: <pod_name>
   spec:
     containers:
-      - name: <container_name>
-        image: <image_name>
+    - name: <container_name>
+      image: <image_name>
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
-            - matchExpressions:
-              - key: <key>
-                operator: <In | NotIn | Exists | DoesNotExist | Gt | Lt>
-                values: [value_list]
+          - matchExpressions:
+            - key: <key>
+              operator: <In | NotIn | Exists | DoesNotExist | Gt | Lt>
+              values: [value_list]
         preferredDuringSchedulingIgnoredDuringExecution:
           ...
         requiredDuringSchedulingRequiredDuringExecution:
@@ -387,17 +387,17 @@
 - Readiness probe definition
   - HTTP Test
 
-  ```yaml
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    name: <pod_name>
-  spec:
-    containers:
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: <pod_name>
+    spec:
+      containers:
       - name: <container_name>
         image: <image_name>
         ports:
-          - containerPort: <container_port>
+        - containerPort: <container_port>
         readinessProbe:
           httpGet:
             path: <path_to_readiness_check>
@@ -405,26 +405,26 @@
           initialDelaySeconds: [delay_before_readiness_check]
           periodSeconds: [how_often_to_perform_readiness_check]
           failureThreashold: [num_attempts_before_stopping_probe]
-  ```
+    ```
 
   - TCP Test
 
-  ```yaml
-  ...
-  readinessProbe:
-    tcpSocket:
-      port: <tcp_port>
-  ```
+    ```yaml
+    ...
+    readinessProbe:
+      tcpSocket:
+        port: <tcp_port>
+    ```
   
   - Executing command
 
-  ```yaml
-  ...
-  readinessProbe:
-    exec:
-      command:
-        [command_list]
-  ```
+    ```yaml
+    ...
+    readinessProbe:
+      exec:
+        command:
+          [command_list]
+    ```
 
 ### Liveness Probe
 
@@ -433,17 +433,17 @@
 
   - HTTP Test
 
-  ```yaml
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    name: <pod_name>
-  spec:
-    containers:
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: <pod_name>
+    spec:
+      containers:
       - name: <container_name>
         image: <image_name>
         ports:
-          - containerPort: <container_port>
+        - containerPort: <container_port>
         livenessProbe:
           httpGet:
             path: <path_to_readiness_check>
@@ -451,53 +451,99 @@
           initialDelaySeconds: [delay_before_liveness_check]
           periodSeconds: [how_often_to_perform_liveness_check]
           failureThreashold: [num_attempts_before_stopping_probe]
-  ```
+    ```
 
   - TCP Test
 
-  ```yaml
-  ...
-  livenessProbe:
-    tcpSocket:
-      port: <tcp_port>
-  ```
+    ```yaml
+    ...
+    livenessProbe:
+      tcpSocket:
+        port: <tcp_port>
+    ```
   
   - Executing command
 
-  ```yaml
-  ...
-  livenessProbe:
-    exec:
-      command:
-        [command_list]
-  ```
+    ```yaml
+    ...
+    livenessProbe:
+      exec:
+        command:
+          [command_list]
+    ```
 
 ### Container Logging
 
 - Viewing live logs
 
-```bash
-kubectl logs -f <pod_name> [container_name]
-```
+  ```bash
+  kubectl logs -f <pod_name> [container_name]
+  ```
 
 ### Monitoring - Metrics Server
 
 - In-memory monitoring solution
 - Deploying metrics server
 
-```bash
-git clone https://github.com/kubernetes-incubator/metrics-server.git
-kubectl create -f <yaml_repository>
-```
+  ```bash
+  git clone https://github.com/kubernetes-incubator/metrics-server.git
+  kubectl create -f <yaml_repository>
+  ```
 
 - Viewing node performance metrics
 
-```bash
-kubectl top node
-```
+  ```bash
+  kubectl top nodes
+  ```
 
 - Viewing pod performance metrics
 
-```bash
-kubectl top pod
-```
+  ```bash
+  kubectl top pods
+  ```
+
+## Pod Design
+
+### Label, Selector, and Annotation
+
+- Label
+  - Properties attached to each object
+  - Label definition
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: <pod_name>
+      labels:
+        <key_value_pairs>
+    spec:
+      containers:
+      - name: <container_name>
+        image: <image_name>
+    ```
+
+- Selector
+  - Filters objects based on labels
+  - Selecting specific pods
+
+    ```bash
+    kubectl get pods --selector <key>=<value>
+    ```
+
+- Annotation
+  - Records details for informetric purpose
+  - Annotation definition
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: <pod_name>
+      annotations:
+        <key_value_pairs>
+    spec:
+      containers:
+      - name: <container_name>
+        image: <image_name>
+    ```
