@@ -487,7 +487,7 @@ kubectl logs -f <pod_name> [container_name]
 
 ```bash
 git clone https://github.com/kubernetes-incubator/metrics-server.git
-kubectl create -f <yaml_file>
+kubectl create -f <yaml_repository>
 ```
 
 - Viewing node performance metrics
