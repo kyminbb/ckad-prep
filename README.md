@@ -806,3 +806,44 @@
     Create with `kubectl create -f <yaml_file>`
 
 ### Network Policy
+
+<p align="center">
+  <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/network-policy.png" width="60%" height="60%">
+</p>
+
+- Restricts communication between pods
+  - By default, all pods in cluster can communicate with each other
+- Network policy definition
+
+  ```yaml
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: <network_policy_name>
+  spec:
+    podSelector:
+      matchLabels:
+        [key_value_pairs_of_pods_to_manage]
+    policyTypes:
+    - Ingress
+    - Egress
+    ingress:
+    - from:  # (podSelector and namespaceSelector) or ipBlock
+      - podSelector:
+          matchLabels:
+            [key_value_pairs_of_from_pods]
+        namespaceSelector:  # Put dash to make (podSelector or namespaceSelector)
+          matchLabels:
+            [key_value_pairs_of_from_namespaces]
+      - ipBlock:
+          cidr: [allowed_ip_block]
+          except: [unallowed_ip_block]
+      ports:
+        protocol: [ingress_protocol]
+        port: [ingress_port]
+    egress:
+    - to:
+      ...
+  ```
+
+  Create with `kubectl create -f <yaml_file>`
