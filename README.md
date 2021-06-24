@@ -248,7 +248,7 @@
       image: <image_name>
       resources:
         requests:
-          memory: [memory_amount] # "256M"
+          memory: [memory_amount]  # "256M"
           cpu: [cpu_count]  # 1
         limits:
           memory: [max_memory_amount]  # "2G"
@@ -621,7 +621,7 @@
     template:
       <pod_definition>
     completions: [num_pods_to_complete]
-    parallelism: [num_pods_to_complete_in_parallel]
+    parallelism: [num_pods_to_run_in_parallel]
   ```
   
   Create with `kubectl create -f <yaml_file>`
@@ -640,5 +640,53 @@
         template:
           <pod_definition>
         completions: [num_pods_to_complete]
-        parallelism: [num_pods_to_complete_in_parallel]
+        parallelism: [num_pods_to_run_in_parallel]
   ```
+
+## Service and Networking
+
+### Service
+
+- NodePort
+  - Enables applications to be accesible to users
+  - Listens to a port on a node and forwards requests on that port to inner pods
+  - Automatically spans across multiple nodes and forwards requests randomly
+  - NodePort definition
+  
+    ```yaml
+    apiVersion: v1
+    kind: Serivce
+    metadata:
+      name: <service_name>
+    spec:
+      type: NodePort
+      ports:
+      - targetPort: [pod_port]
+        port: <service_port>
+        nodePort: [node_port]  # 30000 - 32767
+      selector:
+        [key_value_pairs_of_pods_to_manage]
+    ```
+    
+    Create with `kubectl create -f <yaml_file>`
+- ClusterIP
+  - Allows communication between different microservices
+  - ClusterIP definition
+
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: <service_name>
+    spec:
+      type: ClusterIP
+      ports:
+      - targetPort: [pod_port]
+        port: <service_port>
+      selector:
+        [key_value_pairs_of_pods_to_manage]
+    ```
+
+### Ingress Networking
+
+### Network Policy
