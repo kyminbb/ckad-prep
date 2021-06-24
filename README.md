@@ -808,7 +808,7 @@
 ### Network Policy
 
 <p align="center">
-  <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/network-policy.png" width="60%" height="60%">
+  <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/network-policy.png" width="50%" height="50%">
 </p>
 
 - Restricts communication between pods
@@ -837,9 +837,10 @@
             [key_value_pairs_of_from_namespaces]
       - ipBlock:
           cidr: [allowed_ip_block]
-          except: [unallowed_ip_block]
+          except: 
+            [unallowed_ip_block_list]
       ports:
-        protocol: [ingress_protocol]
+      - protocol: [ingress_protocol]
         port: [ingress_port]
     egress:
     - to:
