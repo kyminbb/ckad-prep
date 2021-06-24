@@ -651,6 +651,11 @@
   - Enables applications to be accesible to users
   - Listens to a port on a node and forwards requests on that port to inner pods
   - Automatically spans across multiple nodes and forwards requests randomly
+
+<p align="center">
+  <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/nodeport.png" width="70%" height="70%">
+</p>
+
   - NodePort definition
   
     ```yaml
@@ -688,5 +693,117 @@
     ```
 
 ### Ingress Networking
+
+- Helps users access applications using a single externally accessible URL
+- Routes requests to different services based on URL part
+- Implements SSL security
+
+<p align="center">
+  <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/ingress.png" width="70%" height="70%">
+</p>
+
+- Ingress controller
+  - ex) Nginx, GCE
+  - Config map definition
+    
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: nginx-configuration
+    data:
+      <key_value_pairs>
+    ```
+    
+  - Deployment definition
+
+    ```yaml
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      name: nginx-ingress-controller
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          name: nginx-ingress
+      template:
+        metadata:
+          labels:
+            name: nginx-ingress
+        spec:
+          containers:
+          - name: nginx-ingress-controller
+            image: <nginx_ingress_controller_image_name>
+          args:
+          - /nginx-ingress-controller
+          - --configmap=$(POD_NAMESPACE)/nginx-configuration
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          ports:
+          - name: http
+            containerPort: 80
+          - name: https
+            containerPort: 443
+    ```
+    
+  - NodePort definition
+  
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: nginx-ingress
+    spec:
+      type: NodePort
+      ports:
+      - port: 80
+        targetPort: 80
+        protocol: TCP
+        name: http
+      - port: 443
+        targetPort: 443
+        protocol: TCP
+        name: https
+      selector:
+        name: nginx-ingress
+    ```
+    
+  - Requires service account with correct cluster roles and role bindings
+- Ingress resource
+  - Configures rules to foward requests
+
+<p align="center">
+  <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/ingress-resource.png" width="70%" height="70%">
+</p>
+
+  - Ingress resource definition
+
+    ```yaml
+    apiVersion: extensions/v1beta1
+    kind: Ingress
+    metadata:
+      name: <ingress_resource_name>
+    spec:
+      rules:
+      - host: <url_host>
+        http:
+          paths:
+          - path: <url_path>
+            backend:
+              serviceName: <service_name>
+              servicePort: <service_port>
+          ...
+      ...
+    ```
+  
+    Create with `kubectl create -f <yaml_file>`
 
 ### Network Policy
