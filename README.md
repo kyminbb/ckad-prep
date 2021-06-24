@@ -648,14 +648,14 @@
 ### Service
 
 - NodePort
+
+  <p align="center">
+    <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/nodeport.png" width="70%" height="70%">
+  </p>
+
   - Enables applications to be accesible to users
   - Listens to a port on a node and forwards requests on that port to inner pods
   - Automatically spans across multiple nodes and forwards requests randomly
-
-<p align="center">
-  <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/nodeport.png" width="70%" height="70%">
-</p>
-
   - NodePort definition
   
     ```yaml
@@ -672,7 +672,7 @@
       selector:
         [key_value_pairs_of_pods_to_manage]
     ```
-    
+
     Create with `kubectl create -f <yaml_file>`
 - ClusterIP
   - Allows communication between different microservices
@@ -694,18 +694,17 @@
 
 ### Ingress Networking
 
-- Helps users access applications using a single externally accessible URL
-- Routes requests to different services based on URL part
-- Implements SSL security
-
 <p align="center">
   <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/ingress.png" width="70%" height="70%">
 </p>
 
+- Helps users access applications using a single externally accessible URL
+- Routes requests to different services based on URL part
+- Implements SSL security
 - Ingress controller
   - ex) Nginx, GCE
   - Config map definition
-    
+
     ```yaml
     apiVersion: v1
     kind: ConfigMap
@@ -714,7 +713,7 @@
     data:
       <key_value_pairs>
     ```
-    
+
   - Deployment definition
 
     ```yaml
@@ -753,7 +752,7 @@
           - name: https
             containerPort: 443
     ```
-    
+
   - NodePort definition
   
     ```yaml
@@ -775,15 +774,15 @@
       selector:
         name: nginx-ingress
     ```
-    
+
   - Requires service account with correct cluster roles and role bindings
 - Ingress resource
+  
+  <p align="center">
+    <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/ingress-resource.png" width="70%" height="70%">
+  </p>
+  
   - Configures rules to foward requests
-
-<p align="center">
-  <img src="https://github.com/kyminbb/ckad-prep/blob/main/docs/images/ingress-resource.png" width="70%" height="70%">
-</p>
-
   - Ingress resource definition
 
     ```yaml
