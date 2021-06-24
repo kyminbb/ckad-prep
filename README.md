@@ -592,3 +592,53 @@
   ```bash
   kubectl rollout undo deployment <deployment_name>
   ```
+  
+### Job
+
+- Runs a set of pods to perform a task to completion
+- By default, pod always recreates its containers when they exit
+  
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+  spec:
+    containers:
+    - name: <container_name>
+      image: <image_name>
+    restartPolicy: Always | Never | OnFailure
+  ```
+  
+- Job definition
+
+  ```yaml
+  apiVersion: batch/v1
+  kind: job
+  metadata:
+    name: <job_name>
+  spec:
+    template:
+      <pod_definition>
+    completions: [num_pods_to_complete]
+    parallelism: [num_pods_to_complete_in_parallel]
+  ```
+  
+  Create with `kubectl create -f <yaml_file>`
+  - Job tries to create new pods until it has the given number of successful completions
+- CronJob definition
+
+  ```yaml
+  apiVersion: batch/v1beta1
+  kind: CronJob
+  metadata:
+    name: <job_name>
+  spec:
+    schedule: <job_schedule>
+    jobTemplate:
+      spec:
+        template:
+          <pod_definition>
+        completions: [num_pods_to_complete]
+        parallelism: [num_pods_to_complete_in_parallel]
+  ```
