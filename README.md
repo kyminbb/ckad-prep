@@ -6,6 +6,7 @@
 - [Observability](#observability)
 - [Pod Design](#pod-design)
 - [Service and Networking](#service-and-networking)
+- [State Persistence](#state-persistence)
 
 ## Configuration
 
@@ -855,3 +856,137 @@
   ```
 
   Create with `kubectl create -f <yaml_file>`
+
+## State Persistence
+
+### Volume
+
+- Stores data that is retained permanently even when pod terminates
+- Volume definition
+
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod_name>
+  spec:
+    containers:
+    - name: <container_name>
+      image: <image_name>
+      volumeMounts:
+      - name: <volume_name>
+        mountPath: <mounted_volume_path_in_container>
+    volumes:
+    - name: <volume_name>
+      hostPath:
+        path: [volume_path_in_node]
+        type: Directory
+      persistentVolumeClaim:
+        claimName: [persistent_volume_claim_name]
+  ```
+
+  Create with `kubectl create -f <yaml_file>`
+- Persistent volume
+  - Cluster-wide pool of storage volumes configured by administrator
+  - Persistent volume definition
+
+    ```yaml
+    apiVersion: v1
+    kind: PersistentVolume
+    metadata:
+      name: <persistent_volume_name>
+    spec:
+      accessModes:
+        - ReadWriteOnce | ReadOnlyMany | ReadWriteMany
+      capacity:
+        storage: <amount_of_storage>
+      persistentVolumeReclaimPolicy: Retain | Delete | Recycle
+      hostPath:
+        path: [persistent_volume_path_in_cluster]
+    ```
+
+    Create with `kubectl create -f <yaml_file>`
+- Persistent volume claim
+  - Binds appropriate persistent volume to user request
+  - By default, when persistent volume claim is deleted, its corresponding persistent volume is retained
+  - Persistent volume claim definition
+
+    ```yaml
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: <persistent_volume_claim_name>
+    spec:
+      accessModes:
+        - ReadWriteOnce | ReadOnlyMany | ReadWriteMany
+      resources:
+        requests:
+          storage: <amount_of_claimed_storage>
+      storageClassName: [storage_class_name]
+    ```
+
+    Create with `kubectl create -f <yaml_file>`
+
+### Storage Class
+
+- Dynamically provisions storage when claim is made
+- User no longer needs to create persistent volume
+- Storage class definition
+
+  ```yaml
+  apiVersion: storage.k8s.io/v1
+  kind: StorageClass
+  metadata:
+    name: <storage_class_name>
+  provisioner: <provisioner_name>
+  volumeBindingMode: Immediate | WaitForFirstConsumer
+  ```
+
+  Create with `kubectl create -f <yaml_file>`
+
+### Stateful Set
+
+- Simliar to deployment, yet creates pods in specific order
+- Pod names are fixed whenever pods are recreated
+- Stateful set definition
+
+  ```yaml
+  apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    name: <stateful_set_name>
+  spec:
+    template:
+      <pod_definition>
+    replicas: <num_replicas>
+    selector:
+      matchLabels:
+        [key_value_pairs_of_pods_to_manage]
+    serviceName: <headless_service_name>
+    podManagementPolicy: OrderedReady | Parallel
+    volumeClaimTemplates:
+      [list_of_persistent_volume_claim_definitions]
+  ```
+
+  Create with `kubectl create -f <yaml_file>`
+  - `Parellel` - unordered pod creation
+- Headless service
+  - Creates static DNS entry for each pod in the format of `<host_name>.<headless_service_name>.<namespace_name>.svc.<cluster_domain>.local`
+    - ex) `mysql-pod.mysql-h.default.svc.cluster.local`
+    - Unique `host_name` is automatically created by stateful set
+  - Headless service definition
+
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata: 
+      name: <headless_service_name>
+    spec:
+      ports:
+      - port: <port>
+      selector:
+        [key_value_pairs_of_pods_manage]
+      clusterIP: None
+    ```
+
+    Create with `kubectl create -f <yaml_file>`
